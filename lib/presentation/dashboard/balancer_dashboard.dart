@@ -28,6 +28,20 @@ class _BalancerDashboardState extends State<BalancerDashboard>
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              actions: [
+                IconButton(
+                  key: model.infoKey,
+                  onPressed:
+                      () => model.showBalanceToolTip(
+                        context,
+                        model.infoKey,
+                        Strings.balancerInfo,
+                        autoDismiss : false
+                      ),
+                  icon: Icon(Icons.info, color: textOnPrimary),
+                ),
+                SizedBox(width: 16),
+              ],
               centerTitle: true,
             ),
             body: Stack(
