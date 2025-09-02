@@ -1,5 +1,5 @@
 export 'package:flutter/material.dart';
-export 'package:chemical_reaction_balancer/presentation/balancer_dashboard.dart';
+export 'package:chemical_reaction_balancer/presentation/dashboard/balancer_dashboard.dart';
 export 'package:flutter/scheduler.dart';
 export 'package:chemical_reaction_balancer/presentation/splash_screen.dart';
 export 'package:chemical_reaction_balancer/domain/utils/strings.dart';
@@ -7,3 +7,6 @@ export 'package:chemical_reaction_balancer/domain/utils/app_colors.dart';
 export 'package:chemical_reaction_balancer/data/fraction.dart';
 export 'dart:math';
 export 'package:chemical_reaction_balancer/domain/extensions/integer_extension.dart';
+export 'package:stacked/stacked.dart';
+export 'package:chemical_reaction_balancer/presentation/dashboard/viewmodel/dashboard_viewmodel.dart';
+export 'package:chemical_reaction_balancer/domain/utils/solver.dart';

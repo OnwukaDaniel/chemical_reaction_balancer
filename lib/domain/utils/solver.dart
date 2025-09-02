@@ -1,6 +1,36 @@
 import 'package:chemical_reaction_balancer/imports.dart';
 
 class Solver {
+  /// Only call when validator validates the equation has reactants and product
+  static List<String> getReactantsList(String equation) {
+    String separator =
+        equation.contains('->') ? '->' : (equation.contains('=>') ? '=>' : '=');
+    if (!equation.contains(separator)) {
+      throw Exception('Equation does not contain a valid separator');
+    }
+    return equation
+        .split(separator)[0]
+        .trim()
+        .split('+')
+        .map((e) => e.trim())
+        .toList();
+  }
+
+  /// Only call when validator validates the equation has reactants and product
+  static List<String> getProductsList(String equation) {
+    String separator =
+        equation.contains('->') ? '->' : (equation.contains('=>') ? '=>' : '=');
+    if (!equation.contains(separator)) {
+      throw Exception('Equation does not contain a valid separator');
+    }
+    return equation
+        .split(separator)[1]
+        .trim()
+        .split('+')
+        .map((e) => e.trim())
+        .toList();
+  }
+
   Map<String, int> parseCompound(String compound) {
     final regex = RegExp(r'([A-Z][a-z]*)(\d*)');
     final Map<String, int> counts = {};
@@ -12,8 +42,11 @@ class Solver {
     return counts;
   }
 
-// Build the element balance matrix
-  List<List<Fraction>> buildMatrix(List<String> reactants, List<String> products) {
+  // Build the element balance matrix
+  List<List<Fraction>> buildMatrix(
+    List<String> reactants,
+    List<String> products,
+  ) {
     final elements = <String>{};
     for (var c in [...reactants, ...products]) {
       elements.addAll(parseCompound(c).keys);
@@ -22,7 +55,8 @@ class Solver {
 
     final matrix = List.generate(
       elementList.length,
-          (_) => List.generate(reactants.length + products.length, (_) => Fraction(0)),
+      (_) =>
+          List.generate(reactants.length + products.length, (_) => Fraction(0)),
     );
 
     for (int j = 0; j < reactants.length; j++) {
@@ -34,13 +68,15 @@ class Solver {
     for (int j = 0; j < products.length; j++) {
       final counts = parseCompound(products[j]);
       for (int i = 0; i < elementList.length; i++) {
-        matrix[i][reactants.length + j] = Fraction(-(counts[elementList[i]] ?? 0));
+        matrix[i][reactants.length + j] = Fraction(
+          -(counts[elementList[i]] ?? 0),
+        );
       }
     }
     return matrix;
   }
 
-// Gaussian elimination (row-reduction) to solve A*x = 0
+  // Gaussian elimination (row-reduction) to solve A*x = 0
   List<Fraction> solve(List<List<Fraction>> matrix) {
     final rows = matrix.length;
     final cols = matrix[0].length;
@@ -91,11 +127,10 @@ class Solver {
       solution[leadingCol] = rhs * Fraction(-1);
     }
 
-
     // Scale to integers
     int lcm = solution.map((f) => f.den).reduce(_lcm);
     List<int> intSolution =
-    solution.map((f) => f.num * (lcm ~/ f.den)).toList();
+        solution.map((f) => f.num * (lcm ~/ f.den)).toList();
 
     // Normalize gcd
     int g = intSolution.map((e) => e.abs()).reduce(_gcd);
@@ -105,5 +140,6 @@ class Solver {
   }
 
   int _gcd(int a, int b) => b == 0 ? a : _gcd(b, a % b);
+
   int _lcm(int a, int b) => (a * b) ~/ _gcd(a, b);
 }
