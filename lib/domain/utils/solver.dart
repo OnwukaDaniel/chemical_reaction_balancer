@@ -16,6 +16,30 @@ class Solver {
         .toList();
   }
 
+  static List<String> getElementsList(String equation) {
+    final reactants = getReactantsList(equation);
+    final products = getProductsList(equation);
+    final elements = <String>{};
+    for (var c in [...reactants, ...products]) {
+      final regex = RegExp(r'([A-Z][a-z]*)');
+      for (final match in regex.allMatches(c)) {
+        elements.add(match.group(1)!);
+      }
+    }
+    return elements.toList();
+  }
+
+  static List<String> getElementsListOnly(List<String> side) {
+    final elements = <String>{};
+    for (var c in side) {
+      final regex = RegExp(r'([A-Z][a-z]*)');
+      for (final match in regex.allMatches(c)) {
+        elements.add(match.group(1)!);
+      }
+    }
+    return elements.toList();
+  }
+
   /// Only call when validator validates the equation has reactants and product
   static List<String> getProductsList(String equation) {
     String separator =

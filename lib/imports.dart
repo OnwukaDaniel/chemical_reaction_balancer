@@ -10,3 +10,4 @@ export 'package:chemical_reaction_balancer/domain/extensions/integer_extension.d
 export 'package:stacked/stacked.dart';
 export 'package:chemical_reaction_balancer/presentation/dashboard/viewmodel/dashboard_viewmodel.dart';
 export 'package:chemical_reaction_balancer/domain/utils/solver.dart';
+export 'package:chemical_reaction_balancer/domain/utils/equation_validator.dart';

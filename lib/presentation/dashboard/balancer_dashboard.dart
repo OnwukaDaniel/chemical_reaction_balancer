@@ -50,7 +50,9 @@ class _BalancerDashboardState extends State<BalancerDashboard>
                             focusedBorder: border,
                           ),
                           onChanged: (value) => model.callFormValidator(),
-                          validator: (value) => model.validateEquation(value),
+                          validator:
+                              (value) =>
+                                  EquationValidator.validateEquation(value),
                         ),
                       ),
                       SizedBox(height: 46),
