@@ -1,6 +1,15 @@
 import 'package:chemical_reaction_balancer/imports.dart';
 
 class Solver {
+
+  static divideReactantsProducts(String equation) {
+    String separator =
+        equation.contains('->') ? '->' : (equation.contains('=>') ? '=>' : '=');
+    if (!equation.contains(separator)) {
+      throw Exception('Equation does not contain a valid separator');
+    }
+    return equation.split(separator).map((e) => e.trim()).toList();
+  }
   /// Only call when validator validates the equation has reactants and product
   static List<String> getReactantsList(String equation) {
     String separator =
@@ -10,6 +19,21 @@ class Solver {
     }
     return equation
         .split(separator)[0]
+        .trim()
+        .split('+')
+        .map((e) => e.trim())
+        .toList();
+  }
+
+  /// Only call when validator validates the equation has reactants and product
+  static List<String> getProductsList(String equation) {
+    String separator =
+        equation.contains('->') ? '->' : (equation.contains('=>') ? '=>' : '=');
+    if (!equation.contains(separator)) {
+      throw Exception('Equation does not contain a valid separator');
+    }
+    return equation
+        .split(separator)[1]
         .trim()
         .split('+')
         .map((e) => e.trim())
@@ -38,21 +62,6 @@ class Solver {
       }
     }
     return elements.toList();
-  }
-
-  /// Only call when validator validates the equation has reactants and product
-  static List<String> getProductsList(String equation) {
-    String separator =
-        equation.contains('->') ? '->' : (equation.contains('=>') ? '=>' : '=');
-    if (!equation.contains(separator)) {
-      throw Exception('Equation does not contain a valid separator');
-    }
-    return equation
-        .split(separator)[1]
-        .trim()
-        .split('+')
-        .map((e) => e.trim())
-        .toList();
   }
 
   Map<String, int> parseCompound(String compound) {

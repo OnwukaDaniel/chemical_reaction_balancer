@@ -43,6 +43,7 @@ class _BalancerDashboardState extends State<BalancerDashboard>
                           controller: model.equationController,
                           decoration: InputDecoration(
                             hintText: sampleEquation,
+                            errorMaxLines: 3,
                             labelText: 'Enter a chemical equation to balance',
                             hintStyle: TextStyle(color: Colors.grey[600]),
                             border: border,
