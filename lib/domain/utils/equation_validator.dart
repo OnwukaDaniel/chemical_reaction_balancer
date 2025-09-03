@@ -42,10 +42,10 @@ class EquationValidator {
     if (!isValidChemicalNotation(products)) {
       return 'Product side contains invalid symbols. Only use elements, numbers, +, (), [], and spaces';
     }
-    if (reactantList.any((r) => !RegExp(r'^[A-Za-z0-9+\s]+$').hasMatch(r))) {
+    if (reactantList.any((r) => !RegExp(r'^[A-Za-z0-9\+\(\)\[\]\{\}\s]*$').hasMatch(r))) {
       return 'Reactant side contains invalid symbols';
     }
-    if (productList.any((r) => !RegExp(r'^[A-Za-z0-9+\s]+$').hasMatch(r))) {
+    if (productList.any((r) => !RegExp(r'^[A-Za-z0-9\+\(\)\[\]\{\}\s]*$').hasMatch(r))) {
       return 'Product side contains invalid symbols';
     }
     if (Solver.getElementsListOnly(productList).contains('')) {

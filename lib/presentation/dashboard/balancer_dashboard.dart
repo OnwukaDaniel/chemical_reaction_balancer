@@ -36,7 +36,7 @@ class _BalancerDashboardState extends State<BalancerDashboard>
                         context,
                         model.infoKey,
                         Strings.balancerInfo,
-                        autoDismiss : false
+                        autoDismiss: false,
                       ),
                   icon: Icon(Icons.info, color: textOnPrimary),
                 ),

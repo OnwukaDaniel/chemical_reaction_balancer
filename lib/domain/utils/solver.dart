@@ -64,7 +64,7 @@ class Solver {
     return elements.toList();
   }
 
-  Map<String, int> parseCompound(String compound) {
+  static Map<String, int> parseCompound(String compound) {
     final regex = RegExp(r'([A-Z][a-z]*)(\d*)');
     final Map<String, int> counts = {};
     for (final match in regex.allMatches(compound)) {
@@ -76,7 +76,7 @@ class Solver {
   }
 
   // Build the element balance matrix
-  List<List<Fraction>> buildMatrix(
+  static List<List<Fraction>> buildMatrix(
     List<String> reactants,
     List<String> products,
   ) {
@@ -110,7 +110,7 @@ class Solver {
   }
 
   // Gaussian elimination (row-reduction) to solve A*x = 0
-  List<Fraction> solve(List<List<Fraction>> matrix) {
+  static List<Fraction> solve(List<List<Fraction>> matrix) {
     final rows = matrix.length;
     final cols = matrix[0].length;
     int row = 0;
@@ -162,17 +162,26 @@ class Solver {
 
     // Scale to integers
     int lcm = solution.map((f) => f.den).reduce(_lcm);
-    List<int> intSolution =
-        solution.map((f) => f.num * (lcm ~/ f.den)).toList();
 
-    // Normalize gcd
-    int g = intSolution.map((e) => e.abs()).reduce(_gcd);
+
+    List<int> intSolution = solution.map((f) {
+      // Handle zero denominators safely
+      if (f.den == 0) return f.num;
+      return f.num * (lcm ~/ f.den);
+    }).toList();
+
+    // Normalize gcd - Make sure we don't have empty list
+    if (intSolution.every((e) => e == 0)) {
+      return solution.map((f) => Fraction(0)).toList();
+    }
+
+    int g = intSolution.where((e) => e != 0).map((e) => e.abs()).reduce(_gcd);
     intSolution = intSolution.map((e) => e ~/ g).toList();
 
     return intSolution.map((e) => Fraction(e)).toList();
   }
 
-  int _gcd(int a, int b) => b == 0 ? a : _gcd(b, a % b);
+  static int _gcd(int a, int b) => b == 0 ? a : _gcd(b, a % b);
 
-  int _lcm(int a, int b) => (a * b) ~/ _gcd(a, b);
+  static int _lcm(int a, int b) => (a * b) ~/ _gcd(a, b);
 }

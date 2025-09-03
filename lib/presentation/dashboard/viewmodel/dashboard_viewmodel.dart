@@ -11,13 +11,25 @@ class DashboardViewModel extends BaseViewModel {
   callFormValidator() => formKey.currentState?.validate();
 
   doAction() {
-    debugPrint('--------------- DO ACTION ---------------');
     if (formKey.currentState?.validate() ?? false) {
       final input = equationController.text.trim();
       displayText = 'Getting elements...';
       notifyListeners();
       Future.delayed(const Duration(seconds: 1), () {
+        final reactants = Solver.getReactantsList(input);
+        final products = Solver.getProductsList(input);
         displayText = Solver.getElementsList(input).join(' + ');
+        final matrix = Solver.buildMatrix(reactants, products);
+        debugPrint('Matrix: *************** $matrix');
+        final solution = Solver.solve(matrix); // returns Fractions scaled to ints
+
+        // Print nice
+        String side(List<String> chems, int offset) =>
+            List.generate(chems.length, (i) {
+              final coeff = solution[offset + i].num; // integer after scaling
+              return "${coeff == 1 ? '' : coeff.toString()}${chems[i]}";
+            }).join(" + ");
+        displayText = '${side(reactants, 0)} -> ${side(products, reactants.length)}';
         notifyListeners();
       });
     } else {
